@@ -52,6 +52,29 @@ The project was built in four stages, each one feeding into the next.
 
 **1. Database design (MySQL).** The raw transaction data was modeled into a relational schema with appropriate types, indexes for the query patterns expected later (fraud rate by state, by bank, by hour), and a set of 22 business-facing SQL queries — the kind a risk analyst would actually ask of this data, from cross-bank fraud comparisons to a rule-based risk-tier baseline.
 
+```mermaid
+erDiagram
+  UPI_TRANSACTIONS {
+    varchar transaction_id PK
+    datetime txn_timestamp
+    enum transaction_type
+    enum merchant_category
+    int amount_inr
+    enum transaction_status
+    enum sender_age_group
+    enum receiver_age_group
+    enum sender_state
+    enum sender_bank
+    enum receiver_bank
+    enum device_type
+    enum network_type
+    boolean fraud_flag
+    tinyint hour_of_day
+    enum day_of_week
+    boolean is_weekend
+  }
+```
+
 **2. Exploratory analysis (Python).** Every categorical and numerical field was examined against the fraud label — transaction type, merchant category, amount, time of day, geography, device, and network — with the goal of identifying which factors, if any, separated fraudulent transactions from legitimate ones.
 ![Fraud Rate by Hour](images/02_fraud_by_hour.png)
 
@@ -86,6 +109,9 @@ The project was built in four stages, each one feeding into the next.
 
 ![SHAP on Real Data](images/04_shap_real_data.png)
 ![SHAP on Synthetic Data](images/05_shap_synthetic_data.png)
+
+![Threshold Tuning](images/07_threshold_tuning.png)
+*Choosing the right decision threshold is a business trade-off, not a default setting.*
 ![Confusion Matrix](images/06_confusion_matrix.png)
 
 **The finding:** with the transaction-level attributes available in this dataset, fraud cannot be reliably predicted — and that conclusion is now well-supported, not assumed. **The recommendation:** the modeling pipeline built here is ready to use; what's missing is data with real predictive signal. In a production setting, that would mean pushing for behavioral features (is this amount unusual for *this specific customer*, not the population average), device and session fingerprinting, and account-level relationship data — the categories of feature that real-world fraud systems lean on most heavily, and that static, per-transaction fields like the ones available here generally can't substitute for.
@@ -125,8 +151,11 @@ UPISHIELD/
 
 ---
 
+---
+
 <div align="center">
 
-*Built as part of a data science & machine learning portfolio.*
+If this project resonates with what you're looking for in a Data Scientist, I'd love to talk.
+📧 your-vishalverma.50103@.com · 🔗 [LinkedIn](www.linkedin.com/in/vishalvermacore)
 
 </div>
