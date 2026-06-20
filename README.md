@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ UPISHIELD
+# UPISHIELD
 ### UPI Fraud Detection & Risk Intelligence
 
 *A complete data pipeline — from raw transaction logs to a tested, explainable fraud model — built on 250,000 real-world-style UPI transactions.*
@@ -44,6 +44,8 @@ UPI now carries the majority of India's digital retail payment volume, and fraud
 
 The dataset used here reflects the central difficulty of this problem in practice: out of 250,000 transactions, only 480 — roughly 0.19% — are labeled fraudulent. Any modeling approach that doesn't directly account for this imbalance will default to a model that's technically accurate and practically useless. The brief, then, wasn't just "predict fraud" — it was "build a process that would hold up to scrutiny by a risk team that has seen accuracy numbers be misleading before."
 
+![Fraud vs Legitimate Transactions](images/01_class_imbalance.png)
+
 ## Methodology
 
 The project was built in four stages, each one feeding into the next.
@@ -51,6 +53,7 @@ The project was built in four stages, each one feeding into the next.
 **1. Database design (MySQL).** The raw transaction data was modeled into a relational schema with appropriate types, indexes for the query patterns expected later (fraud rate by state, by bank, by hour), and a set of 22 business-facing SQL queries — the kind a risk analyst would actually ask of this data, from cross-bank fraud comparisons to a rule-based risk-tier baseline.
 
 **2. Exploratory analysis (Python).** Every categorical and numerical field was examined against the fraud label — transaction type, merchant category, amount, time of day, geography, device, and network — with the goal of identifying which factors, if any, separated fraudulent transactions from legitimate ones.
+![Fraud Rate by Hour](images/02_fraud_by_hour.png)
 
 **3. Feature engineering.** The patterns observed in the EDA were translated into model-ready columns: a high-amount flag, a log-transformed and z-scored amount, night and late-night time windows, a same-bank/cross-bank flag, and a round-number flag (a known heuristic in real fraud detection, where automated transfers tend to use clean amounts).
 
@@ -71,6 +74,8 @@ The project was built in four stages, each one feeding into the next.
 **Applied judgment** — recognizing when a result needs to be questioned rather than reported, and designing a controlled experiment to isolate the cause.
 
 ## Results & Recommendation
+![Real vs Synthetic Model Comparison](images/03_real_vs_synthetic_curves.png)
+*The grey line (real data) shows no separation from random guessing. The red line (synthetic, controlled experiment) shows the pipeline working as expected.*
 
 | Check | Real fraud_flag | Synthetic fraud_flag (controlled test) |
 |---|---|---|
@@ -78,6 +83,10 @@ The project was built in four stages, each one feeding into the next.
 | Cross-validation PR-AUC | ~0.002 (baseline) | 0.18 (≈10x baseline) |
 | ROC-AUC | ~0.51 (random) | 0.74 |
 | SHAP top features | No consistent leader | The 4 designed risk factors, in order |
+
+![SHAP on Real Data](images/04_shap_real_data.png)
+![SHAP on Synthetic Data](images/05_shap_synthetic_data.png)
+![Confusion Matrix](images/06_confusion_matrix.png)
 
 **The finding:** with the transaction-level attributes available in this dataset, fraud cannot be reliably predicted — and that conclusion is now well-supported, not assumed. **The recommendation:** the modeling pipeline built here is ready to use; what's missing is data with real predictive signal. In a production setting, that would mean pushing for behavioral features (is this amount unusual for *this specific customer*, not the population average), device and session fingerprinting, and account-level relationship data — the categories of feature that real-world fraud systems lean on most heavily, and that static, per-transaction fields like the ones available here generally can't substitute for.
 
@@ -118,6 +127,6 @@ UPISHIELD/
 
 <div align="center">
 
-*Built as part of a data analytics & machine learning portfolio.*
+*Built as part of a data science & machine learning portfolio.*
 
 </div>
