@@ -156,6 +156,6 @@ UPISHIELD/
 <div align="center">
 
 If this project resonates with what you're looking for in a Data Scientist, I'd love to talk.
-📧 vishalverma.50103@.com · 🔗 [LinkedIN](www.linkedin.com/in/vishalvermacore)
+📧 vishalverma.50103@.com · 🔗 [LinkedIN](https://www.linkedin.com/in/vishal-verma)
 
 </div>
